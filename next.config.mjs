@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+import { withSentryConfig } from '@sentry/nextjs';
 
-export default nextConfig;
+const nextConfig = {
+  // Your existing Next.js configuration
+};
+
+const sentryWebpackPluginOptions = {
+  // Additional config options for the Sentry Webpack plugin.
+};
+
+export default withSentryConfig(nextConfig, sentryWebpackPluginOptions);
