@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 
 export async function getServerSideProps(context) {
+    console.log('tis workin');
     Sentry.init({
         dsn: 'https://4caf53527042b95271893cfa197eeab6@o4504052292517888.ingest.us.sentry.io/4507986010898432',
         tracesSampleRate: 1.0,
@@ -16,12 +17,12 @@ export async function getServerSideProps(context) {
                 ...transaction.tags,
                 operation: 'server-side',
             };
-            console.log('tis workin');
+            
             return transaction;
         },
     });
 
-    Sentry.configureScope(scope => {
+    Sentry.withScope(scope => {
         scope.setTag('operation', 'server-side');
     });
 
@@ -40,7 +41,7 @@ export async function getServerSideProps(context) {
     }
 }
 
-export default function SSRExample({ data, error }) {
+const SSRExample = ({ data, error }) => {
     if (error) {
         return <div>Error: {error}</div>;
     }
@@ -51,4 +52,6 @@ export default function SSRExample({ data, error }) {
             <p>{data.message}</p>
         </div>
     );
-}
+};
+
+export default SSRExample;
