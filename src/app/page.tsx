@@ -1,9 +1,9 @@
-import Image from 'next/image';
 import styles from './page.module.css';
 import * as Sentry from '@sentry/nextjs';
 
 async function fetchData() {
-  return Sentry.startSpan({ name: 'fetchData' }, async () => {
+  return Sentry.startSpan({ name: 'fetchData' }, async (span) => {
+    span.setAttribute('operation', 'client-side');
     try {
       // Simulate data fetching
       const data = 'Hello, world!';
@@ -21,21 +21,9 @@ export default async function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-          <li>Data fetched from server: {data}</li>
-        </ol>
+        <h1 className={styles.title}>Sentry SSR Example</h1>
+        <p className={styles.tagline}>Monitor client and server operations with ease.</p>
+        <p className={styles.message}>Data fetched from server: {data}</p>
       </main>
     </div>
   );
