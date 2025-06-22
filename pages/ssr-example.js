@@ -6,6 +6,7 @@ export async function getServerSideProps() {
     });
 
     const fetchSpan = Sentry.startSpan({ name: 'fetch-data' });
+    fetchSpan.setAttribute('operation', 'server-side');
     try {
         // Simulate fetching data from an API or database
         const data = { message: 'Hello from the server side!' };
