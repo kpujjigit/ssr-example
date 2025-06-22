@@ -2,22 +2,17 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import * as Sentry from '@sentry/nextjs';
 
-interface HomeProps {
-  data: string;
-}
-
 async function fetchData() {
-  const transaction = Sentry.startSpan({ name: 'fetchData' }, (span) => span);
-  try {
-    // Simulate data fetching
-    const data = 'Hello, world!';
-    return data;
-  } catch (error) {
-    Sentry.captureException(error);
-    return 'Error fetching data';
-  } finally {
-    transaction.end();
-  }
+  return Sentry.startSpan({ name: 'fetchData' }, async () => {
+    try {
+      // Simulate data fetching
+      const data = 'Hello, world!';
+      return data;
+    } catch (error) {
+      Sentry.captureException(error);
+      return 'Error fetching data';
+    }
+  });
 }
 
 export default async function Home() {

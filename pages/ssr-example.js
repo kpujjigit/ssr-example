@@ -1,31 +1,11 @@
 import * as Sentry from '@sentry/nextjs';
 
-export async function getServerSideProps(context) {
-    console.log('tis workin');
-    Sentry.init({
-        dsn: 'https://4caf53527042b95271893cfa197eeab6@o4504052292517888.ingest.us.sentry.io/4507986010898432',
-        tracesSampleRate: 1.0,
-        beforeSend(event) {
-            event.tags = {
-                ...event.tags,
-                operation: 'server-side',
-            };
-            return event;
-        },
-        beforeSendTransaction(transaction) {
-            transaction.tags = {
-                ...transaction.tags,
-                operation: 'server-side',
-            };
-            
-            return transaction;
-        },
-    });
-
-    Sentry.withScope(scope => {
+export async function getServerSideProps() {
+    Sentry.configureScope(scope => {
         scope.setTag('operation', 'server-side');
     });
 
+    const fetchSpan = Sentry.startSpan({ name: 'fetch-data' });
     try {
         // Simulate fetching data from an API or database
         const data = { message: 'Hello from the server side!' };
@@ -38,6 +18,8 @@ export async function getServerSideProps(context) {
         return {
             props: { error: 'Failed to fetch data' },
         };
+    } finally {
+        fetchSpan.end();
     }
 }
 

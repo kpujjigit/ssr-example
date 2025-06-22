@@ -3,6 +3,11 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig = {
   // Your existing Next.js configuration
+  webpack: (config) => {
+    config.externals = config.externals || [];
+    config.externals.push('@sentry-internal/node-cpu-profiler');
+    return config;
+  },
 };
 
 const sentryWebpackPluginOptions = {
